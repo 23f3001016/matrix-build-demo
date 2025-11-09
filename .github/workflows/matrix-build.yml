@@ -1,0 +1,37 @@
+name: Matrix Build with Artifacts
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build:
+    name: Build for Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: matrix-0808d5c
+        run: echo "Building for Python version ${{ matrix.python-version }}"
+
+      - name: Generate build artifact
+        run: |
+          echo "This is the build output for Python ${{ matrix.python-version }}" > build_output.txt
+          echo "Timestamp: $(date)" >> build_output.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-0808d5c-py${{ matrix.python-version }}
+          path: build_output.txt
